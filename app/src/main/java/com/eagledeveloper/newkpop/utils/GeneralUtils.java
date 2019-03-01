@@ -1,13 +1,11 @@
 package com.eagledeveloper.newkpop.utils;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 
 import com.eagledeveloper.newkpop.R;
-
-
 /**
  * Created by eapple on 30/10/2018.
  */
@@ -17,13 +15,14 @@ public class GeneralUtils {
     public static SharedPreferences.Editor editor;
 
 
-    public static Fragment connectFragment(Context context, Fragment fragment) {
-        ((AppCompatActivity) context).getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+    public static Fragment connectDrawerFragmentWithoutBack(Context context, Fragment fragment) {
+        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.drawer_container, fragment).addToBackStack("true").commit();
         return fragment;
     }
 
-    public static Fragment connectFragmentWithBackStack(Context context, Fragment fragment) {
-        ((AppCompatActivity) context).getFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("true").commit();
+
+    public static Fragment connectFragementWithDrawer(Context context,Fragment fragment){
+        ((AppCompatActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.drawer_container,fragment).addToBackStack("true").commit();
         return fragment;
     }
 
@@ -58,23 +57,11 @@ public class GeneralUtils {
         return getSharedPreferences(context).getInt("id",0);
     }
 
-    public static int getUserScore(Context context){
-        return getSharedPreferences(context).getInt("score",0);
-    }
-
     public static String getContestID(Context context){
         return getSharedPreferences(context).getString("contestID","");
     }
 
-    public static String getEmail(Context context){
-        return getSharedPreferences(context).getString("email","");
-    }
-    public static String getToken(Context context){
-        return getSharedPreferences(context).getString("token","");
-    }
-    public static String getResultDate(Context context){
-        return getSharedPreferences(context).getString("date","");
-    }
+
 
     public static Boolean getOTP(Context context){
         return getSharedPreferences(context).getBoolean("check_otp",false);
