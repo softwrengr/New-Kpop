@@ -16,7 +16,7 @@ public class GeneralUtils {
 
 
     public static Fragment connectDrawerFragmentWithoutBack(Context context, Fragment fragment) {
-        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.drawer_container, fragment).addToBackStack("true").commit();
+        ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.drawer_container, fragment).commit();
         return fragment;
     }
 
@@ -57,8 +57,8 @@ public class GeneralUtils {
         return getSharedPreferences(context).getInt("id",0);
     }
 
-    public static String getContestID(Context context){
-        return getSharedPreferences(context).getString("contestID","");
+    public static String getImage(Context context){
+        return getSharedPreferences(context).getString("image","");
     }
 
 

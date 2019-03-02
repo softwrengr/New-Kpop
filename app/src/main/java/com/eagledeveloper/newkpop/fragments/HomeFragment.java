@@ -1,15 +1,20 @@
 package com.eagledeveloper.newkpop.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eagledeveloper.newkpop.R;
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        customActionBar();
         initUI();
         return view;
     }
@@ -70,9 +76,9 @@ public class HomeFragment extends Fragment {
                     } catch (Exception e) {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                } else if (response.body().getStatus()) {
+                } else if (response.body().getSuccess()) {
 
-                    wallPaperDetailModelList.addAll(response.body().getData());
+                    wallPaperDetailModelList.addAll(response.body().getData().getData());
                     wallPaperAdapters = new WallPaperAdapters(getActivity(), wallPaperDetailModelList);
                     gvWallpapers.setAdapter(wallPaperAdapters);
                     wallPaperAdapters.notifyDataSetChanged();
@@ -86,5 +92,22 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void customActionBar() {
+        android.support.v7.app.ActionBar mActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayHomeAsUpEnabled(false);
+        mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1f2e36")));
+        mActionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#16222C")));
+        LayoutInflater mInflater = LayoutInflater.from(getActivity());
+        View mCustomView = mInflater.inflate(R.layout.custom_actionbar, null);
+        TextView tvTitle = mCustomView.findViewById(R.id.title);
+        tvTitle.setText("New Kpop Wallpapers");
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+        mActionBar.show();
+
     }
 }

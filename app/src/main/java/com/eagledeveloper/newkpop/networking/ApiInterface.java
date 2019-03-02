@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 
 public interface ApiInterface {
 
-    @GET()
+    @GET("categories_details?page=1")
     Call<WallPaperResponseModel> showWallPapers();
 
 }

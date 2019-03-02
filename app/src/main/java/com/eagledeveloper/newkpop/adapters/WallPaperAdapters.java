@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.fragments.HomeFragment;
+import com.eagledeveloper.newkpop.fragments.WallPaperFragment;
 import com.eagledeveloper.newkpop.models.WallPaperDetailModel;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
@@ -63,15 +64,17 @@ public class WallPaperAdapters extends BaseAdapter {
         viewHolder = new WallPaperAdapters.MyViewHolder();
         convertView = layoutInflater.inflate(R.layout.custome_wallpaper_layout, parent, false);
         viewHolder.ivWallpaper = convertView.findViewById(R.id.iv_wallpaper);
+        viewHolder.layout_category = convertView.findViewById(R.id.layout);
 
 
-        Glide.with(context).load("").into(viewHolder.ivWallpaper);
+        Glide.with(context).load(model.getImage()).into(viewHolder.ivWallpaper);
 
 
         viewHolder.layout_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GeneralUtils.connectFragementWithDrawer(context, new HomeFragment());
+                GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
+                GeneralUtils.putStringValueInEditor(context,"image",model.getImage());
             }
         });
 

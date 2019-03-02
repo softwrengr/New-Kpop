@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/back_color"
     tools:context=".fragments.HomeFragment">
 
     <GridView
@@ -13,6 +14,8 @@
         android:numColumns="3"
         android:verticalSpacing="2sp"
         android:horizontalSpacing="2sp"
+        android:layout_marginLeft="5sp"
+        android:layout_marginRight="5sp"
         android:stretchMode="columnWidth">
 
     </GridView>
