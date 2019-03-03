@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,8 +42,15 @@ public class HomeFragment extends Fragment {
     View view;
     @BindView(R.id.gv_wallpaper)
     GridView gvWallpapers;
-    ArrayList<WallPaperDetailModel> wallPaperDetailModelList;
     WallPaperAdapters wallPaperAdapters;
+    ArrayList<WallPaperDetailModel> wallPaperDetailModelList;
+    ArrayList<WallPaperDetailModel> loadMoreList;
+
+    int pageNo = 1;
+    int totalItem = 18;
+    private int pastVisibleItems, visibleItemCount, totalItemCount, previousTotal = 0;
+    private int view_threshold = 15;
+    private boolean isLoading = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,20 +59,56 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         customActionBar();
         initUI();
+
         return view;
     }
 
     private void initUI() {
         ButterKnife.bind(this, view);
         wallPaperDetailModelList = new ArrayList<>();
+        loadMoreList = new ArrayList<>();
         alertDialog = AlertUtils.createProgressDialog(getActivity());
         alertDialog.show();
+        wallPaperAdapters = new WallPaperAdapters(getActivity(), wallPaperDetailModelList);
+        gvWallpapers.setAdapter(wallPaperAdapters);
         apiCallShowWallPapers();
+
+        gvWallpapers.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if (visibleItemCount > 0) {
+                    if (isLoading) {
+                        if (totalItemCount > previousTotal) {
+                            isLoading = false;
+                            previousTotal = totalItemCount;
+
+                        }
+                    }
+                }
+
+                if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_threshold)) {
+                    pageNo++;
+                    loadMoreItems(pageNo);
+                    isLoading= true;
+                }
+                else if(totalItemCount==totalItem){
+                    Toast.makeText(getActivity(), "No More Items", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
     }
 
     private void apiCallShowWallPapers() {
         ApiInterface services = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<WallPaperResponseModel> allUsers = services.showWallPapers();
+        Call<WallPaperResponseModel> allUsers = services.showWallPapers(pageNo);
         allUsers.enqueue(new Callback<WallPaperResponseModel>() {
             @Override
             public void onResponse(Call<WallPaperResponseModel> call, Response<WallPaperResponseModel> response) {
@@ -79,8 +123,6 @@ public class HomeFragment extends Fragment {
                 } else if (response.body().getSuccess()) {
 
                     wallPaperDetailModelList.addAll(response.body().getData().getData());
-                    wallPaperAdapters = new WallPaperAdapters(getActivity(), wallPaperDetailModelList);
-                    gvWallpapers.setAdapter(wallPaperAdapters);
                     wallPaperAdapters.notifyDataSetChanged();
 
                 }
@@ -109,5 +151,41 @@ public class HomeFragment extends Fragment {
         mActionBar.setDisplayShowCustomEnabled(true);
         mActionBar.show();
 
+    }
+
+    private void loadMoreItems(int pageNo) {
+//        alertDialog = AlertUtils.createProgressDialog(getActivity());
+//        alertDialog.show();
+        Log.d("test", "testing");
+        ApiInterface services = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<WallPaperResponseModel> allUsers = services.showWallPapers(pageNo);
+        allUsers.enqueue(new Callback<WallPaperResponseModel>() {
+            @Override
+            public void onResponse(Call<WallPaperResponseModel> call, Response<WallPaperResponseModel> response) {
+//                alertDialog.dismiss();
+                if (response.body() == null) {
+                    try {
+                        JSONObject jObjError = new JSONObject(response.errorBody().string());
+                        Toast.makeText(getActivity(), jObjError.getString("message"), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else if (response.body().getSuccess()) {
+
+                    loadMoreList.addAll(response.body().getData().getData());
+
+                    wallPaperDetailModelList.addAll(loadMoreList);
+
+                    wallPaperAdapters.notifyDataSetChanged();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<WallPaperResponseModel> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -7,6 +7,8 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Created by eapple on 29/08/2018.
@@ -14,7 +16,7 @@ import retrofit2.http.POST;
 
 public interface ApiInterface {
 
-    @GET("categories_details?page=1")
-    Call<WallPaperResponseModel> showWallPapers();
+    @GET("categories_details?")
+    Call<WallPaperResponseModel> showWallPapers(@Query("page") int page);
 
 }
