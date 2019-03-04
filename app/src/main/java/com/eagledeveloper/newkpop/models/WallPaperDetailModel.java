@@ -10,9 +10,6 @@ public class WallPaperDetailModel {
     @SerializedName("image")
     @Expose
     private String image;
-    @SerializedName("model_number")
-    @Expose
-    private String modelNumber;
     @SerializedName("created_at")
     @Expose
     private String createdAt;
@@ -34,14 +31,6 @@ public class WallPaperDetailModel {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getModelNumber() {
-        return modelNumber;
-    }
-
-    public void setModelNumber(String modelNumber) {
-        this.modelNumber = modelNumber;
     }
 
     public String getCreatedAt() {

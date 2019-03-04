@@ -47,10 +47,10 @@ public class HomeFragment extends Fragment {
     ArrayList<WallPaperDetailModel> loadMoreList;
 
     int pageNo = 1;
-    int totalItem = 18;
+    int totalItem;
     private int pastVisibleItems, visibleItemCount, totalItemCount, previousTotal = 0;
     private int view_threshold = 15;
-    private boolean isLoading = true;
+    private boolean isLoading = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,22 +84,25 @@ public class HomeFragment extends Fragment {
                 final int lastItem = firstVisibleItem + visibleItemCount;
 
                 if (visibleItemCount > 0) {
-                    if (isLoading) {
+                    if (!isLoading) {
                         if (totalItemCount > previousTotal) {
-                            isLoading = false;
+                            isLoading = true;
                             previousTotal = totalItemCount;
 
+                        }
+                        else {
+                            isLoading = false;
                         }
                     }
                 }
 
-                if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_threshold)) {
+                Log.d("total",String.valueOf(firstVisibleItem + view_threshold));
+
+                if (isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + view_threshold)) {
+                    Toast.makeText(getActivity(), String.valueOf(firstVisibleItem), Toast.LENGTH_SHORT).show();
                     pageNo++;
                     loadMoreItems(pageNo);
-                    isLoading= true;
-                }
-                else if(totalItemCount==totalItem){
-                    Toast.makeText(getActivity(), "No More Items", Toast.LENGTH_SHORT).show();
+                    isLoading= false;
                 }
             }
         });
@@ -121,7 +124,7 @@ public class HomeFragment extends Fragment {
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else if (response.body().getSuccess()) {
-
+                    totalItem = response.body().getCount();
                     wallPaperDetailModelList.addAll(response.body().getData().getData());
                     wallPaperAdapters.notifyDataSetChanged();
 
