@@ -1,8 +1,11 @@
 package com.eagledeveloper.newkpop.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,53 +22,40 @@ import com.eagledeveloper.newkpop.models.WallPaperDetailModel;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class WallPaperAdapters extends BaseAdapter {
-    ArrayList<WallPaperDetailModel> wallPaperDetailModelArrayList;
+public class WallPaperAdapters extends RecyclerView.Adapter<WallPaperAdapters.MyViewHolder> {
+    List<WallPaperDetailModel> itemResturantDetailModelList;
     Context context;
-    private LayoutInflater layoutInflater;
-    WallPaperAdapters.MyViewHolder viewHolder = null;
 
-
-    public WallPaperAdapters(Context context, ArrayList<WallPaperDetailModel> wallPaperDetailModelArrayList) {
-        this.wallPaperDetailModelArrayList = wallPaperDetailModelArrayList;
+    public WallPaperAdapters(Context context, List<WallPaperDetailModel> itemResturantDetailModelList) {
         this.context = context;
-        if (context != null) {
-            this.layoutInflater = LayoutInflater.from(context);
+        this.itemResturantDetailModelList = itemResturantDetailModelList;
 
-        }
     }
 
-    @Override
-    public int getCount() {
-        if (wallPaperDetailModelArrayList != null) return wallPaperDetailModelArrayList.size();
-        return 0;
-    }
 
+    @NonNull
     @Override
-    public Object getItem(int position) {
-        if (wallPaperDetailModelArrayList != null && wallPaperDetailModelArrayList.size() > position)
-            return wallPaperDetailModelArrayList.get(position);
-        return null;
+    public WallPaperAdapters.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.custome_wallpaper_layout, parent, false);
+
+        return new WallPaperAdapters.MyViewHolder(itemView);
     }
 
     @Override
     public long getItemId(int position) {
-        final WallPaperDetailModel model = wallPaperDetailModelArrayList.get(position);
-        if (wallPaperDetailModelArrayList != null && wallPaperDetailModelArrayList.size() > position)
-            return wallPaperDetailModelArrayList.size();
+        final WallPaperDetailModel model = itemResturantDetailModelList.get(position);
+        if (itemResturantDetailModelList != null && itemResturantDetailModelList.size() > position)
+            return itemResturantDetailModelList.size();
         return 0;
     }
 
+    @SuppressLint("ResourceType")
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        final WallPaperDetailModel model = wallPaperDetailModelArrayList.get(position);
-
-        viewHolder = new WallPaperAdapters.MyViewHolder();
-        convertView = layoutInflater.inflate(R.layout.custome_wallpaper_layout, parent, false);
-        viewHolder.ivWallpaper = convertView.findViewById(R.id.iv_wallpaper);
-        viewHolder.layout_category = convertView.findViewById(R.id.layout);
-
+    public void onBindViewHolder(@NonNull final WallPaperAdapters.MyViewHolder viewHolder, final int position) {
+        final WallPaperDetailModel model = itemResturantDetailModelList.get(position);
 
         Glide.with(context).load(model.getImage()).into(viewHolder.ivWallpaper);
 
@@ -74,20 +64,28 @@ public class WallPaperAdapters extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
-                GeneralUtils.putStringValueInEditor(context,"image",model.getImage());
+                GeneralUtils.putStringValueInEditor(context, "image", model.getImage());
             }
         });
 
 
-        convertView.setTag(viewHolder);
-        return convertView;
     }
 
+    @Override
+    public int getItemCount() {
+        return itemResturantDetailModelList.size();
+    }
 
-    private class MyViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView ivWallpaper;
         RelativeLayout layout_category;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ivWallpaper = itemView.findViewById(R.id.iv_wallpaper);
+            layout_category = itemView.findViewById(R.id.layout);
+
+
+        }
     }
 }
-
-

@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,17 +43,18 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
     AlertDialog alertDialog;
     View view;
-    @BindView(R.id.gv_wallpaper)
-    GridView gvWallpapers;
+    @BindView(R.id.rv_wallpaper)
+    RecyclerView gvWallpapers;
     WallPaperAdapters wallPaperAdapters;
-    ArrayList<WallPaperDetailModel> wallPaperDetailModelList;
-    ArrayList<WallPaperDetailModel> loadMoreList;
+    List<WallPaperDetailModel> wallPaperDetailModelList;
+    List<WallPaperDetailModel> loadMoreList;
 
     int pageNo = 1;
     int totalItem;
     private int pastVisibleItems, visibleItemCount, totalItemCount, previousTotal = 0;
     private int view_threshold = 15;
-    private boolean isLoading = false;
+    private boolean isLoading = true;
+    GridLayoutManager layoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,6 +69,8 @@ public class HomeFragment extends Fragment {
 
     private void initUI() {
         ButterKnife.bind(this, view);
+        layoutManager = new GridLayoutManager(getActivity(), 3);
+        gvWallpapers.setLayoutManager(layoutManager);
         wallPaperDetailModelList = new ArrayList<>();
         loadMoreList = new ArrayList<>();
         alertDialog = AlertUtils.createProgressDialog(getActivity());
@@ -73,39 +79,41 @@ public class HomeFragment extends Fragment {
         gvWallpapers.setAdapter(wallPaperAdapters);
         apiCallShowWallPapers();
 
-        gvWallpapers.setOnScrollListener(new AbsListView.OnScrollListener() {
+        gvWallpapers.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                visibleItemCount = layoutManager.getChildCount();  //10
+                totalItemCount = layoutManager.getItemCount();     //10
+                pastVisibleItems = layoutManager.findFirstVisibleItemPosition();   //0
 
-            }
+                Log.d("zma",String.valueOf(dy));
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                final int lastItem = firstVisibleItem + visibleItemCount;
 
-                if (visibleItemCount > 0) {
-                    if (!isLoading) {
+                if (dy > 0) {
+                    if (isLoading) {
                         if (totalItemCount > previousTotal) {
-                            isLoading = true;
+                            isLoading = false;
                             previousTotal = totalItemCount;
 
-                        }
-                        else {
-                            isLoading = false;
                         }
                     }
                 }
 
-                Log.d("total",String.valueOf(firstVisibleItem + view_threshold));
+                if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_threshold)) {
+                    if(totalItemCount<totalItem){
+                        pageNo++;
+                        loadMoreItems(pageNo);
+                        isLoading = true;
+                    }
+                    else {
+                        Log.d("no","no more items");
+                    }
 
-                if (isLoading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + view_threshold)) {
-                    Toast.makeText(getActivity(), String.valueOf(firstVisibleItem), Toast.LENGTH_SHORT).show();
-                    pageNo++;
-                    loadMoreItems(pageNo);
-                    isLoading= false;
                 }
             }
         });
+
 
     }
 
@@ -157,15 +165,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadMoreItems(int pageNo) {
-//        alertDialog = AlertUtils.createProgressDialog(getActivity());
-//        alertDialog.show();
+        alertDialog = AlertUtils.createProgressDialog(getActivity());
+        alertDialog.show();
         Log.d("test", "testing");
         ApiInterface services = ApiClient.getApiClient().create(ApiInterface.class);
         Call<WallPaperResponseModel> allUsers = services.showWallPapers(pageNo);
         allUsers.enqueue(new Callback<WallPaperResponseModel>() {
             @Override
             public void onResponse(Call<WallPaperResponseModel> call, Response<WallPaperResponseModel> response) {
-//                alertDialog.dismiss();
+                alertDialog.dismiss();
                 if (response.body() == null) {
                     try {
                         JSONObject jObjError = new JSONObject(response.errorBody().string());
