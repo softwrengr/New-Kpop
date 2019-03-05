@@ -1,4 +1,4 @@
-package com.eagledeveloper.newkpop.models;
+package com.eagledeveloper.newkpop.models.wallpaperDataModels;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

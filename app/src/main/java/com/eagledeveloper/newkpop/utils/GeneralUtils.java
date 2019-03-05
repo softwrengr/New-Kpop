@@ -53,8 +53,8 @@ public class GeneralUtils {
         return context.getSharedPreferences(Configuration.My_PREF, 0);
     }
 
-    public static int getUserID(Context context){
-        return getSharedPreferences(context).getInt("id",0);
+    public static String getImageID(Context context){
+        return getSharedPreferences(context).getString("image_id","");
     }
 
     public static String getImage(Context context){

@@ -9,57 +9,60 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.fragments.WallPaperFragment;
+import com.eagledeveloper.newkpop.models.LikeWallPaperModel;
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailModel;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 import java.util.List;
 
-public class WallPaperAdapters extends RecyclerView.Adapter<WallPaperAdapters.MyViewHolder> {
-    List<WallPaperDetailModel> wallPaperDetailModelList;
+public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.MyViewHolder> {
+    List<LikeWallPaperModel> likeWallPaperModelList;
     Context context;
 
-    public WallPaperAdapters(Context context, List<WallPaperDetailModel> wallPaperDetailModelList) {
+    public LikeAdapter(Context context, List<LikeWallPaperModel> likeWallPaperModelList) {
         this.context = context;
-        this.wallPaperDetailModelList = wallPaperDetailModelList;
+        this.likeWallPaperModelList = likeWallPaperModelList;
 
     }
 
 
     @NonNull
     @Override
-    public WallPaperAdapters.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public LikeAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.custome_wallpaper_layout, parent, false);
 
-        return new WallPaperAdapters.MyViewHolder(itemView);
+        return new LikeAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public long getItemId(int position) {
-        final WallPaperDetailModel model = wallPaperDetailModelList.get(position);
-        if (wallPaperDetailModelList != null && wallPaperDetailModelList.size() > position)
-            return wallPaperDetailModelList.size();
+        final LikeWallPaperModel model = likeWallPaperModelList.get(position);
+        if (likeWallPaperModelList != null && likeWallPaperModelList.size() > position)
+            return likeWallPaperModelList.size();
         return 0;
     }
 
     @SuppressLint("ResourceType")
     @Override
-    public void onBindViewHolder(@NonNull final WallPaperAdapters.MyViewHolder viewHolder, final int position) {
-        final WallPaperDetailModel model = wallPaperDetailModelList.get(position);
+    public void onBindViewHolder(@NonNull final LikeAdapter.MyViewHolder viewHolder, final int position) {
+        final LikeWallPaperModel model = likeWallPaperModelList.get(position);
 
-        Glide.with(context).load(model.getImage()).into(viewHolder.ivWallpaper);
+        Toast.makeText(context, model.getImageUrl(), Toast.LENGTH_SHORT).show();
+        Glide.with(context).load(model.getImageUrl()).into(viewHolder.ivWallpaper);
 
 
         viewHolder.layout_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
-                GeneralUtils.putStringValueInEditor(context,"image_id",String.valueOf(model.getId()));
-                GeneralUtils.putStringValueInEditor(context, "image", model.getImage());
+                GeneralUtils.putStringValueInEditor(context,"image_id",String.valueOf(model.getImageID()));
+                GeneralUtils.putStringValueInEditor(context, "image", model.getImageUrl());
             }
         });
 
@@ -68,7 +71,7 @@ public class WallPaperAdapters extends RecyclerView.Adapter<WallPaperAdapters.My
 
     @Override
     public int getItemCount() {
-        return wallPaperDetailModelList.size();
+        return likeWallPaperModelList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -84,3 +87,4 @@ public class WallPaperAdapters extends RecyclerView.Adapter<WallPaperAdapters.My
         }
     }
 }
+

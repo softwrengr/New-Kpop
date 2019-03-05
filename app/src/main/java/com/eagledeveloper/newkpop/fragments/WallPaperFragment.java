@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.eagledeveloper.newkpop.R;
+import com.eagledeveloper.newkpop.helpers.KpopCrud;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
 import com.eagledeveloper.newkpop.utils.FileUtils;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
@@ -52,7 +53,9 @@ public class WallPaperFragment extends Fragment {
     ImageView ivWallPaper;
 
     Bitmap bitmap = null;
-    String strImage;
+    String strImageID,strImage;
+
+    KpopCrud kpopCrud;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +78,8 @@ public class WallPaperFragment extends Fragment {
 
     private void initUI() {
         ButterKnife.bind(this, view);
+        kpopCrud = new KpopCrud(getActivity());
+        strImageID = GeneralUtils.getImageID(getActivity());
         strImage = GeneralUtils.getImage(getActivity());
 
         if (strImage.equals("") || strImage == null) {
@@ -103,7 +108,7 @@ public class WallPaperFragment extends Fragment {
         layoutLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+             storeLikedImage();
             }
         });
 
@@ -273,5 +278,10 @@ public class WallPaperFragment extends Fragment {
         }
         // The directory is now empty so delete it
         return dir.delete();
+    }
+
+    private void storeLikedImage(){
+        kpopCrud.insertSingleProduct(strImageID, strImage);
+        GeneralUtils.connectDrawerFragmentWithoutBack(getActivity(), new LikedWallPaperFragment());
     }
 }

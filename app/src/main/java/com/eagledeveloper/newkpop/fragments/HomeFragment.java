@@ -1,9 +1,7 @@
 package com.eagledeveloper.newkpop.fragments;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,16 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.adapters.WallPaperAdapters;
-import com.eagledeveloper.newkpop.models.WallPaperDetailModel;
-import com.eagledeveloper.newkpop.models.WallPaperResponseModel;
+import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailModel;
+import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
 import com.eagledeveloper.newkpop.utils.AlertUtils;

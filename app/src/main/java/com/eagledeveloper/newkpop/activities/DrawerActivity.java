@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.fragments.HomeFragment;
+import com.eagledeveloper.newkpop.fragments.LikedWallPaperFragment;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 public class DrawerActivity extends AppCompatActivity
@@ -55,8 +56,8 @@ public class DrawerActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
            GeneralUtils.connectDrawerFragmentWithoutBack(this,new HomeFragment());
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_liked) {
+            GeneralUtils.connectDrawerFragmentWithoutBack(this,new LikedWallPaperFragment());
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_share) {

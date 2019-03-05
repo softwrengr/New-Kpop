@@ -9,7 +9,7 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_liked"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Liked" />
 
