@@ -1,6 +1,7 @@
 package com.eagledeveloper.newkpop.utils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,6 +35,15 @@ public class AlertUtils {
         pd.setVisibility(View.VISIBLE);
         return alertDialog;
 
+    }
+
+    public static ProgressDialog createProgressBar(Activity activity){
+        ProgressDialog pDialog = new ProgressDialog(activity);
+        pDialog.setMessage("Please Wait ...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        //pDialog.show();
+        return pDialog;
     }
 
 }
