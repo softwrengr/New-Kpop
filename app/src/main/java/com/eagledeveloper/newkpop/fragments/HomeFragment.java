@@ -23,6 +23,12 @@ import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseMo
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
+import com.eagledeveloper.newkpop.utils.GeneralUtils;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import org.json.JSONObject;
 
@@ -51,12 +57,24 @@ public class HomeFragment extends Fragment {
     private boolean isLoading = true;
     GridLayoutManager layoutManager;
 
+    private InterstitialAd mInterstitialAd;
+    private AdView mAdView;
+    boolean checkAd = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         customActionBar();
+        MobileAds.initialize(getActivity(),
+                getActivity().getResources().getString(R.string.app_id));
+        mInterstitialAd = new InterstitialAd(getActivity());
+        mInterstitialAd.setAdUnitId(getActivity().getResources().getString(R.string.interstitial_id));
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(adRequest);
+        showAds();
+
         initUI();
 
         return view;
@@ -82,7 +100,7 @@ public class HomeFragment extends Fragment {
                 totalItemCount = layoutManager.getItemCount();     //10
                 pastVisibleItems = layoutManager.findFirstVisibleItemPosition();   //0
 
-                Log.d("zma",String.valueOf(dy));
+                Log.d("zma", String.valueOf(dy));
 
 
                 if (dy > 0) {
@@ -96,19 +114,17 @@ public class HomeFragment extends Fragment {
                 }
 
                 if (!isLoading && (totalItemCount - visibleItemCount) <= (pastVisibleItems + view_threshold)) {
-                    if(totalItemCount<totalItem){
+                    if (totalItemCount < totalItem) {
                         pageNo++;
                         loadMoreItems(pageNo);
                         isLoading = true;
-                    }
-                    else {
-                        Log.d("no","no more items");
+                    } else {
+                        Log.d("no", "no more items");
                     }
 
                 }
             }
         });
-
 
     }
 
@@ -130,6 +146,8 @@ public class HomeFragment extends Fragment {
                     totalItem = response.body().getCount();
                     wallPaperDetailModelList.addAll(response.body().getData().getData());
                     wallPaperAdapters.notifyDataSetChanged();
+
+                    WallPaperFragment.wallPaperDetailModelList = wallPaperDetailModelList;
 
                 }
 
@@ -191,6 +209,42 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<WallPaperResponseModel> call, Throwable t) {
                 Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showAds() {
+
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    Log.d("TAG", "The interstitial wasn't loaded yet.");
+                }
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                //Toast.makeText(getActivity(), "Ad failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Toast.makeText(getActivity(), "Ad open", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                Log.d("tag", "closed");
             }
         });
     }

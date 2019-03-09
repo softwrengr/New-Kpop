@@ -6,23 +6,10 @@
     android:background="@color/back_color"
     tools:context=".fragments.HomeFragment">
 
-    <!--<GridView-->
-        <!--android:id="@+id/gv_wallpaper"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="5sp"-->
-        <!--android:numColumns="3"-->
-        <!--android:verticalSpacing="2sp"-->
-        <!--android:horizontalSpacing="2sp"-->
-        <!--android:layout_marginLeft="5sp"-->
-        <!--android:layout_marginRight="5sp"-->
-        <!--android:stretchMode="columnWidth">-->
-
-    <!--</GridView>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_wallpaper"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>

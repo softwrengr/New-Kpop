@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.eagledeveloper.newkpop.R;
+import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.getSupportActionBar().hide();
+
+        GeneralUtils.putBooleanValueInEditor(this,"check_ad",true);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

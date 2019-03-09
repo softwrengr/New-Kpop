@@ -29,10 +29,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.helpers.KpopCrud;
+import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailModel;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
 import com.eagledeveloper.newkpop.utils.FileUtils;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 import com.eagledeveloper.newkpop.utils.NetworkUtils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -40,6 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,12 +58,13 @@ public class WallPaperFragment extends Fragment {
     View view;
     @BindView(R.id.wallpaper)
     ImageView ivWallPaper;
+    public static List<WallPaperDetailModel> wallPaperDetailModelList;
 
     Bitmap bitmap = null;
     String strImageID,strImage;
 
     KpopCrud kpopCrud;
-
+    AdView mAdView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,6 +79,13 @@ public class WallPaperFragment extends Fragment {
         StrictMode.setVmPolicy(builder.build());
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        mAdView = view.findViewById(R.id.adView);
+
+        MobileAds.initialize(getActivity(),
+                getActivity().getResources().getString(R.string.app_id));
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         initUI();
         return view;
@@ -87,6 +102,7 @@ public class WallPaperFragment extends Fragment {
         } else {
             Glide.with(getActivity()).load(strImage).into(ivWallPaper);
         }
+
 
     }
 

@@ -63,8 +63,8 @@ public class GeneralUtils {
 
 
 
-    public static Boolean getOTP(Context context){
-        return getSharedPreferences(context).getBoolean("check_otp",false);
+    public static Boolean checkAd(Context context){
+        return getSharedPreferences(context).getBoolean("check_ad",false);
     }
 
 }
