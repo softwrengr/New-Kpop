@@ -197,9 +197,8 @@ public class HomeFragment extends Fragment {
                 } else if (response.body().getSuccess()) {
 
                     loadMoreList.addAll(response.body().getData().getData());
-
                     wallPaperDetailModelList.addAll(loadMoreList);
-
+                    WallPaperFragment.wallPaperDetailModelList = wallPaperDetailModelList;
                     wallPaperAdapters.notifyDataSetChanged();
 
                 }

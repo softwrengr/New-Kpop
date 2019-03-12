@@ -58,6 +58,7 @@ public class WallPaperAdapters extends RecyclerView.Adapter<WallPaperAdapters.My
             @Override
             public void onClick(View v) {
                 GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
+                GeneralUtils.putIntegerValueInEditor(context,"position",position);
                 GeneralUtils.putStringValueInEditor(context,"image_id",String.valueOf(model.getId()));
                 GeneralUtils.putStringValueInEditor(context, "image", model.getImage());
             }

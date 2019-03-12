@@ -61,10 +61,13 @@ public class GeneralUtils {
         return getSharedPreferences(context).getString("image","");
     }
 
-
-
     public static Boolean checkAd(Context context){
         return getSharedPreferences(context).getBoolean("check_ad",false);
     }
+
+    public static int getImagePosition(Context context){
+        return getSharedPreferences(context).getInt("position",1);
+    }
+
 
 }

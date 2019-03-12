@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.eagledeveloper.newkpop.R;
+import com.eagledeveloper.newkpop.adapters.ImageAdapter;
 import com.eagledeveloper.newkpop.helpers.KpopCrud;
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailModel;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
@@ -52,11 +54,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class WallPaperFragment extends Fragment {
+public class WallPaperFragment extends Fragment implements ImageAdapter.ImageListener {
     private ProgressDialog pDialog;
     AlertDialog alertDialog;
     View view;
-    @BindView(R.id.wallpaper)
     ImageView ivWallPaper;
     public static List<WallPaperDetailModel> wallPaperDetailModelList;
 
@@ -65,6 +66,9 @@ public class WallPaperFragment extends Fragment {
 
     KpopCrud kpopCrud;
     AdView mAdView;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    ImageAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,14 +98,10 @@ public class WallPaperFragment extends Fragment {
     private void initUI() {
         ButterKnife.bind(this, view);
         kpopCrud = new KpopCrud(getActivity());
-        strImageID = GeneralUtils.getImageID(getActivity());
-        strImage = GeneralUtils.getImage(getActivity());
 
-        if (strImage.equals("") || strImage == null) {
-            ivWallPaper.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.splash));
-        } else {
-            Glide.with(getActivity()).load(strImage).into(ivWallPaper);
-        }
+        adapter = new ImageAdapter(getActivity(),wallPaperDetailModelList,this);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(GeneralUtils.getImagePosition(getActivity()));
 
 
     }
@@ -299,5 +299,12 @@ public class WallPaperFragment extends Fragment {
     private void storeLikedImage(){
         kpopCrud.insertSingleProduct(strImageID, strImage);
         GeneralUtils.connectDrawerFragmentWithoutBack(getActivity(), new LikedWallPaperFragment());
+    }
+
+    @Override
+    public void onImageListener(String imageID,String imageUrl,ImageView imageView) {
+        strImageID = imageID;
+        strImage = imageUrl;
+        ivWallPaper = imageView;
     }
 }
