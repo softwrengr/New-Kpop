@@ -48,6 +48,7 @@ public class NotificationServices extends Service {
 
 
                 if (currentTime.equals("14-54")) {
+                    Log.d("hello","called");
                     //Toast.makeText(NotificationServices.this, "called", Toast.LENGTH_SHORT).show();
                     //automaticSet();
                 } else {
