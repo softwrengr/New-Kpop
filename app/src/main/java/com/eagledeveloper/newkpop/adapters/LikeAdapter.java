@@ -52,8 +52,7 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final LikeAdapter.MyViewHolder viewHolder, final int position) {
         final LikeWallPaperModel model = likeWallPaperModelList.get(position);
-
-        Toast.makeText(context, model.getImageUrl(), Toast.LENGTH_SHORT).show();
+        WallPaperFragment.likeWallPaperModelArrayList = likeWallPaperModelList;
         Glide.with(context).load(model.getImageUrl()).into(viewHolder.ivWallpaper);
 
 
@@ -61,6 +60,8 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
+                GeneralUtils.putStringValueInEditor(context,"check_screen","like_screen");
+                GeneralUtils.putIntegerValueInEditor(context,"position",position);
                 GeneralUtils.putStringValueInEditor(context,"image_id",String.valueOf(model.getImageID()));
                 GeneralUtils.putStringValueInEditor(context, "image", model.getImageUrl());
             }

@@ -67,7 +67,6 @@ public class LikedWallPaperFragment extends Fragment {
             likeAdapter = new LikeAdapter(getActivity(), likeWallPaperModelArrayList);
             rvLikeWallpaper.setAdapter(likeAdapter);
             likeAdapter.notifyDataSetChanged();
-
         }
     }
 

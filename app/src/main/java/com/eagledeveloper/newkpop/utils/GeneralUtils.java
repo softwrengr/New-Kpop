@@ -69,5 +69,13 @@ public class GeneralUtils {
         return getSharedPreferences(context).getInt("position",1);
     }
 
+    public static int getPagerPosition(Context context){
+        return getSharedPreferences(context).getInt("pager_item",0);
+    }
+
+    public static String getCheckScreen(Context context){
+        return getSharedPreferences(context).getString("check_screen","");
+    }
+
 
 }

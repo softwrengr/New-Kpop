@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.WallPaperFragment">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/wallpaper"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="100sp"-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:src="@color/light_color"-->
-        <!--/>-->
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"

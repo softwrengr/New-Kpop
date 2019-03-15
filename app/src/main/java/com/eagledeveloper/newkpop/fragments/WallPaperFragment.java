@@ -1,5 +1,6 @@
 package com.eagledeveloper.newkpop.fragments;
 
+import android.app.Notification;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +32,9 @@ import com.bumptech.glide.Glide;
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.adapters.ImageAdapter;
 import com.eagledeveloper.newkpop.helpers.KpopCrud;
+import com.eagledeveloper.newkpop.models.LikeWallPaperModel;
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailModel;
+import com.eagledeveloper.newkpop.services.NotificationServices;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
 import com.eagledeveloper.newkpop.utils.FileUtils;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
@@ -54,21 +57,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class WallPaperFragment extends Fragment implements ImageAdapter.ImageListener {
+public class WallPaperFragment extends Fragment implements ImageAdapter.ImageListener{
     private ProgressDialog pDialog;
     AlertDialog alertDialog;
     View view;
     ImageView ivWallPaper;
     public static List<WallPaperDetailModel> wallPaperDetailModelList;
+    public static List<LikeWallPaperModel> likeWallPaperModelArrayList;
 
     Bitmap bitmap = null;
-    String strImageID,strImage;
+    String strImageID, strImage, checkScreen;
 
     KpopCrud kpopCrud;
     AdView mAdView;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     ImageAdapter adapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,10 +103,44 @@ public class WallPaperFragment extends Fragment implements ImageAdapter.ImageLis
     private void initUI() {
         ButterKnife.bind(this, view);
         kpopCrud = new KpopCrud(getActivity());
+        strImageID = GeneralUtils.getImageID(getActivity());
+        strImage = GeneralUtils.getImage(getActivity());
+        checkScreen = GeneralUtils.getCheckScreen(getActivity());
 
-        adapter = new ImageAdapter(getActivity(),wallPaperDetailModelList,this);
+        if (checkScreen.equals("like_screen")) {
+            adapter = new ImageAdapter(getActivity(), wallPaperDetailModelList, likeWallPaperModelArrayList,checkScreen, this);
+        }
+        else if (checkScreen.equals("normal_screen")) {
+            adapter = new ImageAdapter(getActivity(), wallPaperDetailModelList, likeWallPaperModelArrayList,checkScreen, this);
+        }
+
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(GeneralUtils.getImagePosition(getActivity()));
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                GeneralUtils.putIntegerValueInEditor(getActivity(), "pager_item", i);
+                if (checkScreen.equals("like_screen")) {
+                    strImage = likeWallPaperModelArrayList.get(i).getImageUrl();
+                    strImageID = String.valueOf(likeWallPaperModelArrayList.get(i).getImageID());
+                } else {
+                    strImage = wallPaperDetailModelList.get(i).getImage();
+                    strImageID = String.valueOf(wallPaperDetailModelList.get(i).getId());
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
 
     }
@@ -124,7 +163,7 @@ public class WallPaperFragment extends Fragment implements ImageAdapter.ImageLis
         layoutLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             storeLikedImage();
+                storeLikedImage();
             }
         });
 
@@ -154,20 +193,7 @@ public class WallPaperFragment extends Fragment implements ImageAdapter.ImageLis
         layoutSet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog = AlertUtils.createProgressDialog(getActivity());
-                alertDialog.show();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean setWallpaper = FileUtils.setWallPaper(getActivity(), ivWallPaper);
-                        if (setWallpaper) {
-                            alertDialog.dismiss();
-                        } else {
-                            Toast.makeText(getActivity(), "try again later", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }, 300);
+              setWallpaper();
             }
         });
 
@@ -190,7 +216,6 @@ public class WallPaperFragment extends Fragment implements ImageAdapter.ImageLis
             System.out.println(e);
         }
     }
-
 
     public class ShareTask extends AsyncTask<String, String, String> {
         private Context context;
@@ -296,15 +321,35 @@ public class WallPaperFragment extends Fragment implements ImageAdapter.ImageLis
         return dir.delete();
     }
 
-    private void storeLikedImage(){
+    private void storeLikedImage() {
         kpopCrud.insertSingleProduct(strImageID, strImage);
         GeneralUtils.connectDrawerFragmentWithoutBack(getActivity(), new LikedWallPaperFragment());
     }
 
     @Override
-    public void onImageListener(String imageID,String imageUrl,ImageView imageView) {
+    public void onImageListener(String imageID, String imageUrl, ImageView imageView) {
         strImageID = imageID;
         strImage = imageUrl;
         ivWallPaper = imageView;
     }
+
+    private void setWallpaper(){
+        alertDialog = AlertUtils.createProgressDialog(getActivity());
+        alertDialog.show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                boolean setWallpaper = FileUtils.setWallPaper(getActivity(), strImage);
+                if (setWallpaper) {
+                    alertDialog.dismiss();
+                } else {
+                    Toast.makeText(getActivity(), "try again later", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, 200);
+    }
+
+
+
 }

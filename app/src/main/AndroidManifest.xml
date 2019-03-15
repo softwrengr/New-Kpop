@@ -28,6 +28,11 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".services.NotificationServices"
+            android:enabled="true"
+            android:exported="true" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/app_id"/>

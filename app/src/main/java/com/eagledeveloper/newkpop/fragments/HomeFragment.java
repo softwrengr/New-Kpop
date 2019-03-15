@@ -22,6 +22,7 @@ import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailMode
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
+import com.eagledeveloper.newkpop.services.NotificationServices;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 import com.google.android.gms.ads.AdListener;
@@ -82,6 +83,7 @@ public class HomeFragment extends Fragment {
 
     private void initUI() {
         ButterKnife.bind(this, view);
+
         layoutManager = new GridLayoutManager(getActivity(), 3);
         gvWallpapers.setLayoutManager(layoutManager);
         wallPaperDetailModelList = new ArrayList<>();
@@ -92,6 +94,7 @@ public class HomeFragment extends Fragment {
         gvWallpapers.setAdapter(wallPaperAdapters);
         apiCallShowWallPapers();
 
+
         gvWallpapers.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -99,9 +102,6 @@ public class HomeFragment extends Fragment {
                 visibleItemCount = layoutManager.getChildCount();  //10
                 totalItemCount = layoutManager.getItemCount();     //10
                 pastVisibleItems = layoutManager.findFirstVisibleItemPosition();   //0
-
-                Log.d("zma", String.valueOf(dy));
-
 
                 if (dy > 0) {
                     if (isLoading) {
@@ -148,6 +148,7 @@ public class HomeFragment extends Fragment {
                     wallPaperAdapters.notifyDataSetChanged();
 
                     WallPaperFragment.wallPaperDetailModelList = wallPaperDetailModelList;
+                    NotificationServices.wallPaperDetailModelList = wallPaperDetailModelList;
 
                 }
 

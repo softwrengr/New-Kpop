@@ -57,10 +57,11 @@ public class WallPaperAdapters extends RecyclerView.Adapter<WallPaperAdapters.My
         viewHolder.layout_category.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
+                GeneralUtils.putStringValueInEditor(context,"check_screen","normal_screen");
                 GeneralUtils.putIntegerValueInEditor(context,"position",position);
                 GeneralUtils.putStringValueInEditor(context,"image_id",String.valueOf(model.getId()));
                 GeneralUtils.putStringValueInEditor(context, "image", model.getImage());
+                GeneralUtils.connectFragementWithDrawer(context, new WallPaperFragment());
             }
         });
 
