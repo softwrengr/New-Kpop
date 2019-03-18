@@ -1,6 +1,7 @@
 package com.eagledeveloper.newkpop.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailMode
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
+import com.eagledeveloper.newkpop.services.AlarmStartService;
 import com.eagledeveloper.newkpop.services.NotificationServices;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
 import com.eagledeveloper.newkpop.utils.Configuration;
@@ -87,6 +89,8 @@ public class HomeFragment extends Fragment {
 
         initUI();
 
+
+        getActivity().startService(new Intent(getActivity(), AlarmStartService.class));
         return view;
     }
 
@@ -134,6 +138,8 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        getActivity().startService(new Intent(context,AlarmStartService.class));
 
     }
 
