@@ -30,6 +30,7 @@ public class DrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         GeneralUtils.connectDrawerFragmentWithoutBack(this,new HomeFragment());
 
 

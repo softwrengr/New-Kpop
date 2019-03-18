@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
         GeneralUtils.putBooleanValueInEditor(this,"check_ad",true);
         startService(new Intent(MainActivity.this, NotificationServices.class));
 
+
+
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
