@@ -2,6 +2,7 @@ package com.eagledeveloper.newkpop.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.StrictMode;
@@ -9,20 +10,35 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.eagledeveloper.newkpop.adapters.LikeAdapter;
+import com.eagledeveloper.newkpop.fragments.HomeFragment;
 import com.eagledeveloper.newkpop.fragments.WallPaperFragment;
+import com.eagledeveloper.newkpop.helpers.KpopCrud;
+import com.eagledeveloper.newkpop.models.LikeWallPaperModel;
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailModel;
+import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
+import com.eagledeveloper.newkpop.networking.ApiClient;
+import com.eagledeveloper.newkpop.networking.ApiInterface;
 import com.eagledeveloper.newkpop.utils.Configuration;
 import com.eagledeveloper.newkpop.utils.FileUtils;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NotificationServices extends Service {
     public static List<WallPaperDetailModel> wallPaperDetailModelList;
     public static boolean checkNofication = true;
-    String time = "11:59";
+    KpopCrud kpopCrud;
+    ArrayList<LikeWallPaperModel> likeWallPaperModelArrayList;
 
     public NotificationServices() {
     }
@@ -42,15 +58,13 @@ public class NotificationServices extends Service {
             @Override
             public void run() {
                 Date c = Calendar.getInstance().getTime();
-
                 SimpleDateFormat df = new SimpleDateFormat("HH-mm");
                 String currentTime = df.format(new Date());
 
-
-                if (currentTime.equals("14-54")) {
-                    Log.d("hello","called");
+                if (currentTime.equals("16-10")) {
+                    Log.d("hello", "called");
                     //Toast.makeText(NotificationServices.this, "called", Toast.LENGTH_SHORT).show();
-                    //automaticSet();
+                    automaticSet();
                 } else {
                     Log.d("zma", "this is not the time");
                 }
@@ -76,15 +90,7 @@ public class NotificationServices extends Service {
             @Override
             public void run() {
 
-//                if (wallPaperDetailModelList == null) {
-//                    wallPaperDetailModelList = WallPaperFragment.wallPaperDetailModelList;
-//                } else {
-//                    String image = wallPaperDetailModelList.get(1).getImage();
-//                    setAutomaticWallpaper(image);
-//
-//                }
-                setAutomaticWallpaper(Configuration.image);
-
+             //   setAutomaticWallpaper(Configuration.image);
 
             }
         }, 200);

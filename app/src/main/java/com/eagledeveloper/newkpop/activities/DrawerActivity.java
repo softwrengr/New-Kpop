@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.fragments.HomeFragment;
 import com.eagledeveloper.newkpop.fragments.LikedWallPaperFragment;
+import com.eagledeveloper.newkpop.fragments.SettingFragment;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 import com.eagledeveloper.newkpop.utils.ShareUtils;
 
@@ -66,6 +67,9 @@ public class DrawerActivity extends AppCompatActivity
             startActivity(ShareUtils.shareApp());
         }else if (id == R.id.nav_feedback) {
           loadGooglePlay();
+        }
+        else if (id == R.id.nav_setting) {
+            GeneralUtils.connectFragementWithDrawer(this,new SettingFragment());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

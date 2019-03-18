@@ -23,6 +23,11 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Feedback" />
 
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Setting" />
+
     </group>
 
 </menu>

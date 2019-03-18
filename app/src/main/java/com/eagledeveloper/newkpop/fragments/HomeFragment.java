@@ -1,8 +1,11 @@
 package com.eagledeveloper.newkpop.fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -24,6 +27,8 @@ import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
 import com.eagledeveloper.newkpop.services.NotificationServices;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
+import com.eagledeveloper.newkpop.utils.Configuration;
+import com.eagledeveloper.newkpop.utils.FileUtils;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -48,8 +53,10 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.rv_wallpaper)
     RecyclerView gvWallpapers;
     WallPaperAdapters wallPaperAdapters;
-    List<WallPaperDetailModel> wallPaperDetailModelList;
+    public static List<WallPaperDetailModel> wallPaperDetailModelList;
     List<WallPaperDetailModel> loadMoreList;
+    public static List<WallPaperDetailModel> list;
+
 
     int pageNo = 1;
     int totalItem;
@@ -61,6 +68,7 @@ public class HomeFragment extends Fragment {
     private InterstitialAd mInterstitialAd;
     private AdView mAdView;
     boolean checkAd = false;
+    public static Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,6 +83,7 @@ public class HomeFragment extends Fragment {
         AdRequest adRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(adRequest);
         showAds();
+        context = getActivity();
 
         initUI();
 
@@ -148,7 +157,7 @@ public class HomeFragment extends Fragment {
                     wallPaperAdapters.notifyDataSetChanged();
 
                     WallPaperFragment.wallPaperDetailModelList = wallPaperDetailModelList;
-                    NotificationServices.wallPaperDetailModelList = wallPaperDetailModelList;
+                 //   NotificationServices.wallPaperDetailModelList = wallPaperDetailModelList;
 
                 }
 
@@ -200,6 +209,7 @@ public class HomeFragment extends Fragment {
                     loadMoreList.addAll(response.body().getData().getData());
                     wallPaperDetailModelList.addAll(loadMoreList);
                     WallPaperFragment.wallPaperDetailModelList = wallPaperDetailModelList;
+                    list = wallPaperDetailModelList;
                     wallPaperAdapters.notifyDataSetChanged();
 
                 }
@@ -248,4 +258,5 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
 }
