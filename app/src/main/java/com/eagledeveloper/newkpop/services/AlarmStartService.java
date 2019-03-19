@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.view.View;
 import android.widget.Toast;
 
+import com.eagledeveloper.newkpop.utils.Configuration;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 public class AlarmStartService extends Service {
@@ -46,8 +47,6 @@ public class AlarmStartService extends Service {
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         int interval = 1000;
 
-//        interval = GeneralUtils.getSharedPreferences(getApplicationContext()).getInt("wallpaperChangeTime",10000);
-
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
@@ -57,6 +56,19 @@ public class AlarmStartService extends Service {
             manager.cancel(pendingIntent);
             Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+    private void automaticSet() {
+
+        if(Configuration.image2==null || Configuration.image2.equals("")){
+            GetImageUrl.checkWall = false;
+            GetImageUrl getImageUrl = new GetImageUrl(this);
+
+        }
+
+
+
     }
 
 }

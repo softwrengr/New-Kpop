@@ -1,6 +1,7 @@
 package com.eagledeveloper.newkpop.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.eagledeveloper.newkpop.R;
+import com.eagledeveloper.newkpop.activities.MainActivity;
+import com.eagledeveloper.newkpop.services.NotificationServices;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 import butterknife.BindView;
@@ -24,17 +27,17 @@ public class SettingFragment extends Fragment {
     @BindView(R.id.my_switch)
     SwitchCompat switchCompat;
 
+//
+//    @BindView(R.id.rb_1hour)
+//    RadioButton rb1Hour;
+//    @BindView(R.id.rb_12hour)
+//    RadioButton rb12Hour;
+//    @BindView(R.id.rb_24hour)
+//    RadioButton rb24Hour;
 
-    @BindView(R.id.rb_1hour)
-    RadioButton rb1Hour;
-    @BindView(R.id.rb_12hour)
-    RadioButton rb12Hour;
-    @BindView(R.id.rb_24hour)
-    RadioButton rb24Hour;
 
-
-    @BindView(R.id.radio_group)
-    RadioGroup radioGroup;
+//    @BindView(R.id.radio_group)
+//    RadioGroup radioGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,43 +52,43 @@ public class SettingFragment extends Fragment {
     private void initUI() {
         ButterKnife.bind(this, view);
 
-     /*   switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    Toast.makeText(getActivity(), "On", Toast.LENGTH_SHORT).show();
+                    getActivity().startService(new Intent(getActivity(), NotificationServices.class));
                 }
                 else {
-                    Toast.makeText(getActivity(), "off", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
-
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_1hour:
-
-
-                        GeneralUtils.putIntegerValueInEditor(getActivity(), "wallpaperChangeTime", 5000);
-
-                        Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
-
-                        break;
-                    case R.id.rb_12hour:
-                        Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
-
-                        GeneralUtils.putIntegerValueInEditor(getActivity(), "wallpaperChangeTime", 10000);
-
-                        break;
-                    case R.id.rb_24hour:
-                        Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
-
-                        GeneralUtils.putIntegerValueInEditor(getActivity(), "wallpaperChangeTime", 20000);
-                        break;
+                    getActivity().stopService(new Intent(getActivity(), NotificationServices.class));
                 }
             }
         });
+
+
+//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                switch (checkedId) {
+//                    case R.id.rb_1hour:
+//
+//
+//                        GeneralUtils.putIntegerValueInEditor(getActivity(), "wallpaperChangeTime", 5000);
+//
+//                        Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+//
+//                        break;
+//                    case R.id.rb_12hour:
+//                        Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
+//
+//                        GeneralUtils.putIntegerValueInEditor(getActivity(), "wallpaperChangeTime", 10000);
+//
+//                        break;
+//                    case R.id.rb_24hour:
+//                        Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
+//
+//                        GeneralUtils.putIntegerValueInEditor(getActivity(), "wallpaperChangeTime", 20000);
+//                        break;
+//                }
+//            }
+//        });
     }
 }

@@ -29,16 +29,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NotificationServices extends Service {
-    public static List<WallPaperDetailModel> wallPaperDetailModelList;
-    public static boolean checkNofication = true;
-    KpopCrud kpopCrud;
-    ArrayList<LikeWallPaperModel> likeWallPaperModelArrayList;
+    int index;
+    String image;
 
     public NotificationServices() {
     }
@@ -58,12 +57,12 @@ public class NotificationServices extends Service {
             @Override
             public void run() {
                 Date c = Calendar.getInstance().getTime();
-                SimpleDateFormat df = new SimpleDateFormat("HH-mm");
+                SimpleDateFormat df = new SimpleDateFormat("ss");
                 String currentTime = df.format(new Date());
 
-                if (currentTime.equals("16-10")) {
-                    Log.d("hello", "called");
-                    //Toast.makeText(NotificationServices.this, "called", Toast.LENGTH_SHORT).show();
+                Toast.makeText(NotificationServices.this, currentTime, Toast.LENGTH_SHORT).show();
+
+                if (currentTime.equals("15") || currentTime.equals("16")) {
                     automaticSet();
                 } else {
                     Log.d("zma", "this is not the time");
@@ -80,35 +79,20 @@ public class NotificationServices extends Service {
     }
 
     private void automaticSet() {
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        if(Configuration.image2==null || Configuration.image2.equals("")){
+            GetImageUrl.checkWall = false;
+            GetImageUrl getImageUrl = new GetImageUrl(this);
 
-             //   setAutomaticWallpaper(Configuration.image);
+        }
 
-            }
-        }, 200);
+
+
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-    private void setAutomaticWallpaper(final String image) {
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                boolean setWallpaper = FileUtils.setWallPaper(NotificationServices.this, image);
-                if (setWallpaper) {
-                } else {
-                    Toast.makeText(NotificationServices.this, "try again later", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, 200);
     }
-
 }

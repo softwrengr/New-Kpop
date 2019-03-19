@@ -39,16 +39,6 @@
             android:exported="true">
         </receiver>
 
-        <receiver
-            android:name=".services.RestartPhoneStartServices"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter android:priority="10">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-
 
         <service
             android:name=".services.NotificationServices"

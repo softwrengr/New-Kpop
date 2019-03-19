@@ -2,6 +2,8 @@ package com.eagledeveloper.newkpop.services;
 
 import android.content.Context;
 import android.media.audiofx.DynamicsProcessing;
+import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,30 +14,38 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.eagledeveloper.newkpop.fragments.HomeFragment;
 import com.eagledeveloper.newkpop.fragments.WallPaperFragment;
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
 import com.eagledeveloper.newkpop.utils.Configuration;
+import com.eagledeveloper.newkpop.utils.FileUtils;
+import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GetImageUrl {
-    ArrayList<String> urlArrayList;
+    public ArrayList<String> urlArrayList;
     Context context;
+    public static boolean checkWall = false;
+    private Random randomGenerator;
 
 
-    public GetImageUrl( Context context) {
+    public GetImageUrl(Context context) {
         this.context = context;
         apiCallShowWallPapers();
     }
@@ -51,13 +61,14 @@ public class GetImageUrl {
                     JSONArray jsonArray = object.getJSONArray("data");
 
                     urlArrayList = new ArrayList<>();
-                    for(int i=0;i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject imageObject = jsonArray.getJSONObject(i);
                         String url = imageObject.getString("image");
                         urlArrayList.add(url);
-                        Log.d("url",urlArrayList.get(i));
-                        Toast.makeText(context, urlArrayList.get(i), Toast.LENGTH_SHORT).show();
 
+                        if (!checkWall) {
+                            setWall(url);
+                        }
                     }
 
 
@@ -85,5 +96,24 @@ public class GetImageUrl {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mRequestQueue.add(stringRequest);
+    }
+
+    private void setWall(final String image) {
+        checkWall = true;
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                boolean setWallpaper = FileUtils.setWallPaper(context, image);
+                if (setWallpaper) {
+
+                } else {
+                }
+            }
+        }, 200);
     }
 }

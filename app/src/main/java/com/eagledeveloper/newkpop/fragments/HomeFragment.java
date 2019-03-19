@@ -26,9 +26,9 @@ import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailMode
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
-import com.eagledeveloper.newkpop.services.AlarmStartService;
 import com.eagledeveloper.newkpop.services.GetImageUrl;
 import com.eagledeveloper.newkpop.services.NotificationServices;
+import com.eagledeveloper.newkpop.services.PeriodicWork;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
 import com.eagledeveloper.newkpop.utils.Configuration;
 import com.eagledeveloper.newkpop.utils.FileUtils;
@@ -43,7 +43,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
@@ -90,16 +93,11 @@ public class HomeFragment extends Fragment {
 
         initUI();
 
-
-        getActivity().startService(new Intent(getActivity(), AlarmStartService.class));
         return view;
     }
 
     private void initUI() {
         ButterKnife.bind(this, view);
-
-        //da me image url dapara call kre d string arraylist k save kom de class k
-        GetImageUrl getImageUrl = new GetImageUrl(getActivity());
 
 
         layoutManager = new GridLayoutManager(getActivity(), 3);
@@ -144,7 +142,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        getActivity().startService(new Intent(context,AlarmStartService.class));
 
     }
 
