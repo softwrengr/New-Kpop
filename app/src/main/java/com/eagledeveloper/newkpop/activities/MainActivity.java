@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.services.NotificationServices;
+import com.eagledeveloper.newkpop.shake.ShakeService;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         GeneralUtils.putBooleanValueInEditor(this,"check_ad",true);
       //  startService(new Intent(MainActivity.this, NotificationServices.class));
 
+
+        startService(new Intent(this, ShakeService.class));
 
 
         Handler handler = new Handler();

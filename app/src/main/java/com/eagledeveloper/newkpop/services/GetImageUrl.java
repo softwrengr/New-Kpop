@@ -65,10 +65,19 @@ public class GetImageUrl {
                         JSONObject imageObject = jsonArray.getJSONObject(i);
                         String url = imageObject.getString("image");
                         urlArrayList.add(url);
+                    }
 
-                        if (!checkWall) {
-                            setWall(url);
-                        }
+
+                    if (!checkWall) {
+
+                        ArrayList<String> list = urlArrayList;
+                        randomGenerator = new Random();
+                        int index = randomGenerator.nextInt(list.size());
+
+                        String string = urlArrayList.get(index);
+                        Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
+                        setWall(string);
+                        Log.d("url",string);
                     }
 
 
@@ -96,6 +105,7 @@ public class GetImageUrl {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         mRequestQueue.add(stringRequest);
+
     }
 
     private void setWall(final String image) {
@@ -114,6 +124,6 @@ public class GetImageUrl {
                 } else {
                 }
             }
-        }, 200);
+        }, 100);
     }
 }

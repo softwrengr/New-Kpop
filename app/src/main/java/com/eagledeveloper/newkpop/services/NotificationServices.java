@@ -60,7 +60,7 @@ public class NotificationServices extends Service {
                 SimpleDateFormat df = new SimpleDateFormat("ss");
                 String currentTime = df.format(new Date());
 
-                Toast.makeText(NotificationServices.this, currentTime, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(NotificationServices.this, currentTime, Toast.LENGTH_SHORT).show();
 
                 if (currentTime.equals("15") || currentTime.equals("16")) {
                     automaticSet();
