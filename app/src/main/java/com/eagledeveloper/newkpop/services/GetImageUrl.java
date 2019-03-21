@@ -67,18 +67,14 @@ public class GetImageUrl {
                         urlArrayList.add(url);
                     }
 
+                    ArrayList<String> list = urlArrayList;
+                    randomGenerator = new Random();
+                    int index = randomGenerator.nextInt(list.size());
 
-                    if (!checkWall) {
-
-                        ArrayList<String> list = urlArrayList;
-                        randomGenerator = new Random();
-                        int index = randomGenerator.nextInt(list.size());
-
-                        String string = urlArrayList.get(index);
-                        Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
-                        setWall(string);
-                        Log.d("url",string);
-                    }
+                    String string = urlArrayList.get(index);
+//                    Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
+                    setWall(string);
+                    Log.d("url", string);
 
 
                 } catch (JSONException e) {

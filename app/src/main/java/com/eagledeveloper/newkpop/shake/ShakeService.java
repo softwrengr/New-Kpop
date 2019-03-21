@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -14,9 +15,11 @@ public class ShakeService extends Service {
     public ShakeService() {
 
     }
+
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private ShakeDetector mShakeDetector;
+    boolean shake = true;
 
 
     @Override
@@ -40,9 +43,30 @@ public class ShakeService extends Service {
             @Override
             public void onShake(int count) {
 
-                Toast.makeText(ShakeService.this, "shake", Toast.LENGTH_SHORT).show();
 
-                GetImageUrl getImageUrl = new GetImageUrl(getApplicationContext());
+                if (shake) {
+
+                    shake = false;
+                    Toast.makeText(ShakeService.this, "shake", Toast.LENGTH_SHORT).show();
+
+
+                    GetImageUrl getImageUrl = new GetImageUrl(getApplicationContext());
+                    new CountDownTimer(5000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+
+
+                        }
+
+                        public void onFinish() {
+
+                            Toast.makeText(ShakeService.this, "finish", Toast.LENGTH_SHORT).show();
+                            shake = true;
+                        }
+
+                    }.start();
+                }
+
 
             }
         });
@@ -54,8 +78,6 @@ public class ShakeService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
-
-
 
 
     }

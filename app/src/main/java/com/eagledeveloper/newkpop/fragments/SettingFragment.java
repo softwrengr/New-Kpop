@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.eagledeveloper.newkpop.R;
 import com.eagledeveloper.newkpop.activities.MainActivity;
+import com.eagledeveloper.newkpop.services.AlarmStartService;
 import com.eagledeveloper.newkpop.services.NotificationServices;
+import com.eagledeveloper.newkpop.shake.ShakeService;
 import com.eagledeveloper.newkpop.utils.GeneralUtils;
 
 import butterknife.BindView;
@@ -24,10 +26,14 @@ import butterknife.ButterKnife;
 
 public class SettingFragment extends Fragment {
     View view;
-    @BindView(R.id.my_switch)
-    SwitchCompat switchCompat;
+    @BindView(R.id.sw_shake)
+    SwitchCompat swShake;
 
-//
+
+    @BindView(R.id.sw_auto)
+    SwitchCompat swAuto;
+
+    //
 //    @BindView(R.id.rb_1hour)
 //    RadioButton rb1Hour;
 //    @BindView(R.id.rb_12hour)
@@ -52,14 +58,30 @@ public class SettingFragment extends Fragment {
     private void initUI() {
         ButterKnife.bind(this, view);
 
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        swShake.setChecked(GeneralUtils.getSharedPreferences(getActivity()).getBoolean("shake_unable", false));
+        swShake.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    getActivity().startService(new Intent(getActivity(), NotificationServices.class));
+                if (isChecked) {
+                    getActivity().startService(new Intent(getActivity(), ShakeService.class));
+                    GeneralUtils.putBooleanValueInEditor(getActivity(), "shake_unable", true);
+                } else {
+                    getActivity().stopService(new Intent(getActivity(), ShakeService.class));
+                    GeneralUtils.putBooleanValueInEditor(getActivity(), "shake_unable", false);
                 }
-                else {
-                    getActivity().stopService(new Intent(getActivity(), NotificationServices.class));
+            }
+        });
+
+        swAuto.setChecked(GeneralUtils.getSharedPreferences(getActivity()).getBoolean("alarm_unable", false));
+        swAuto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    getActivity().startService(new Intent(getActivity(), AlarmStartService.class));
+                    GeneralUtils.putBooleanValueInEditor(getActivity(), "alarm_unable", true);
+                } else {
+                    getActivity().stopService(new Intent(getActivity(), AlarmStartService.class));
+                    GeneralUtils.putBooleanValueInEditor(getActivity(), "alarm_unable", false);
                 }
             }
         });

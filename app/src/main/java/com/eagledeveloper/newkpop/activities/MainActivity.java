@@ -22,13 +22,12 @@ public class MainActivity extends AppCompatActivity {
       //  startService(new Intent(MainActivity.this, NotificationServices.class));
 
 
-        startService(new Intent(this, ShakeService.class));
-
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                finish();
                 startActivity(new Intent(MainActivity.this, DrawerActivity.class));
             }
         }, 2000);

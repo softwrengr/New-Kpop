@@ -28,7 +28,6 @@ public class AlarmStartService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
         Intent alarmIntent = new Intent(this, UpdateWallperBroadCast.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         startAlarm();
@@ -45,7 +44,7 @@ public class AlarmStartService extends Service {
 
     public void startAlarm() {
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 1000;
+        int interval = 10000;
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
         Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
@@ -58,17 +57,5 @@ public class AlarmStartService extends Service {
         }
     }
 
-
-    private void automaticSet() {
-
-        if(Configuration.image2==null || Configuration.image2.equals("")){
-            GetImageUrl.checkWall = false;
-            GetImageUrl getImageUrl = new GetImageUrl(this);
-
-        }
-
-
-
-    }
 
 }

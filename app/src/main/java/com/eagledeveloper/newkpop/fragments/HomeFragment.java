@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment {
         wallPaperDetailModelList = new ArrayList<>();
         loadMoreList = new ArrayList<>();
         alertDialog = AlertUtils.createProgressDialog(getActivity());
-        alertDialog.show();
+//        alertDialog.show();
         wallPaperAdapters = new WallPaperAdapters(getActivity(), wallPaperDetailModelList);
         gvWallpapers.setAdapter(wallPaperAdapters);
         apiCallShowWallPapers();
