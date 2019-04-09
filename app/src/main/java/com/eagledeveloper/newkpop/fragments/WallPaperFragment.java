@@ -351,5 +351,4 @@ public class WallPaperFragment extends Fragment implements ImageAdapter.ImageLis
     }
 
 
-
 }

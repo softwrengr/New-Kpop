@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -44,16 +45,16 @@ public class AlarmStartService extends Service {
 
     public void startAlarm() {
         manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        int interval = 10000;
+        int interval = 3000000;
 
         manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
-        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Automatic change Wallpaper Set", Toast.LENGTH_SHORT).show();
     }
 
     public void cancelAlarm() {
         if (manager != null) {
             manager.cancel(pendingIntent);
-            Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
+            Log.d("auto","cancelled");
         }
     }
 

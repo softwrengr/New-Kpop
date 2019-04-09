@@ -16,8 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    //http://muhammednaveed.com/mcqs/public/api/
-    public static final String BASE_URL = "https://muhammednaveed.com/NewProject/public/api/";
+
+    public static final String BASE_URL = "http://softwarengr.website/NewProject/public/api/";
     public static Retrofit retrofit = null;
 
     public static Retrofit getApiClient(){

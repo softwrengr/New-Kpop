@@ -19,17 +19,8 @@ public class MainActivity extends AppCompatActivity {
         this.getSupportActionBar().hide();
 
         GeneralUtils.putBooleanValueInEditor(this,"check_ad",true);
-      //  startService(new Intent(MainActivity.this, NotificationServices.class));
 
+        startActivity(new Intent(MainActivity.this, DrawerActivity.class));
 
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-                startActivity(new Intent(MainActivity.this, DrawerActivity.class));
-            }
-        }, 2000);
     }
 }

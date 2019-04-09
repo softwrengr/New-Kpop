@@ -26,13 +26,8 @@ import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperDetailMode
 import com.eagledeveloper.newkpop.models.wallpaperDataModels.WallPaperResponseModel;
 import com.eagledeveloper.newkpop.networking.ApiClient;
 import com.eagledeveloper.newkpop.networking.ApiInterface;
-import com.eagledeveloper.newkpop.services.GetImageUrl;
-import com.eagledeveloper.newkpop.services.NotificationServices;
-import com.eagledeveloper.newkpop.services.PeriodicWork;
 import com.eagledeveloper.newkpop.utils.AlertUtils;
-import com.eagledeveloper.newkpop.utils.Configuration;
-import com.eagledeveloper.newkpop.utils.FileUtils;
-import com.eagledeveloper.newkpop.utils.GeneralUtils;
+
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -59,7 +54,7 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.rv_wallpaper)
     RecyclerView gvWallpapers;
     WallPaperAdapters wallPaperAdapters;
-    public static List<WallPaperDetailModel> wallPaperDetailModelList;
+    public  List<WallPaperDetailModel> wallPaperDetailModelList;
     List<WallPaperDetailModel> loadMoreList;
     public static List<WallPaperDetailModel> list;
 
@@ -82,6 +77,13 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_home, container, false);
         customActionBar();
+        initUI();
+
+        return view;
+    }
+
+    private void initUI() {
+        ButterKnife.bind(this, view);
         MobileAds.initialize(getActivity(),
                 getActivity().getResources().getString(R.string.app_id));
         mInterstitialAd = new InterstitialAd(getActivity());
@@ -91,21 +93,13 @@ public class HomeFragment extends Fragment {
         showAds();
         context = getActivity();
 
-        initUI();
-
-        return view;
-    }
-
-    private void initUI() {
-        ButterKnife.bind(this, view);
-
 
         layoutManager = new GridLayoutManager(getActivity(), 3);
         gvWallpapers.setLayoutManager(layoutManager);
         wallPaperDetailModelList = new ArrayList<>();
         loadMoreList = new ArrayList<>();
         alertDialog = AlertUtils.createProgressDialog(getActivity());
-//        alertDialog.show();
+        alertDialog.show();
         wallPaperAdapters = new WallPaperAdapters(getActivity(), wallPaperDetailModelList);
         gvWallpapers.setAdapter(wallPaperAdapters);
         apiCallShowWallPapers();
@@ -165,7 +159,6 @@ public class HomeFragment extends Fragment {
                     wallPaperAdapters.notifyDataSetChanged();
 
                     WallPaperFragment.wallPaperDetailModelList = wallPaperDetailModelList;
-                 //   NotificationServices.wallPaperDetailModelList = wallPaperDetailModelList;
 
                 }
 
@@ -198,7 +191,6 @@ public class HomeFragment extends Fragment {
     private void loadMoreItems(int pageNo) {
         alertDialog = AlertUtils.createProgressDialog(getActivity());
         alertDialog.show();
-        Log.d("test", "testing");
         ApiInterface services = ApiClient.getApiClient().create(ApiInterface.class);
         Call<WallPaperResponseModel> allUsers = services.showWallPapers(pageNo);
         allUsers.enqueue(new Callback<WallPaperResponseModel>() {

@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.eagledeveloper.newkpop.services.GetImageUrl;
@@ -47,7 +48,7 @@ public class ShakeService extends Service {
                 if (shake) {
 
                     shake = false;
-                    Toast.makeText(ShakeService.this, "shake", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShakeService.this, "please wait a few second", Toast.LENGTH_SHORT).show();
 
 
                     GetImageUrl getImageUrl = new GetImageUrl(getApplicationContext());
@@ -59,8 +60,7 @@ public class ShakeService extends Service {
                         }
 
                         public void onFinish() {
-
-                            Toast.makeText(ShakeService.this, "finish", Toast.LENGTH_SHORT).show();
+                            Log.d("shake","shake finished");
                             shake = true;
                         }
 

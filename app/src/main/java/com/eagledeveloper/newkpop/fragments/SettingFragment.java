@@ -33,17 +33,6 @@ public class SettingFragment extends Fragment {
     @BindView(R.id.sw_auto)
     SwitchCompat swAuto;
 
-    //
-//    @BindView(R.id.rb_1hour)
-//    RadioButton rb1Hour;
-//    @BindView(R.id.rb_12hour)
-//    RadioButton rb12Hour;
-//    @BindView(R.id.rb_24hour)
-//    RadioButton rb24Hour;
-
-
-//    @BindView(R.id.radio_group)
-//    RadioGroup radioGroup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,7 +53,7 @@ public class SettingFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     getActivity().startService(new Intent(getActivity(), ShakeService.class));
-                    GeneralUtils.putBooleanValueInEditor(getActivity(), "shake_unable", true);
+                    GeneralUtils.putBooleanValueInEditor(getActivity(), "shake_available", true);
                 } else {
                     getActivity().stopService(new Intent(getActivity(), ShakeService.class));
                     GeneralUtils.putBooleanValueInEditor(getActivity(), "shake_unable", false);

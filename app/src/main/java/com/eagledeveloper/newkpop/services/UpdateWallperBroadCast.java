@@ -16,7 +16,6 @@ import java.util.Random;
 public class UpdateWallperBroadCast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "change", Toast.LENGTH_SHORT).show();
         GetImageUrl getImageUrl = new GetImageUrl(context);
 
     }
